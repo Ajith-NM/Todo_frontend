@@ -1,0 +1,108 @@
+.container {
+    min-height: 90vh;
+    max-height: fit-content;
+    padding-top: 20px;
+}
+
+.container .Todoinputs {
+    background-color: aliceblue;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 60%;
+}
+
+.Todoinputs button {
+    margin: 10px auto 10px;
+    font-size: 18px;
+    padding: 7px 40px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: var(--linear);
+    transition: .3s;
+    color: white;
+    transform: translateX(-170%);
+    transition: .5s;
+}
+
+.Todoinputs button:hover {
+    transform: translateX(-170%) scale(.95);
+}
+
+.Todoinputs input {
+    width: 80%;
+    height: 40px;
+    border: none;
+    color: rgba(0, 0, 0, .7);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    outline: none;
+    font-size: 18px;
+    padding-left: 10px;
+    background: transparent;
+    margin: 0px auto 10px;
+}
+
+.Todoinputs h3 {
+    font-weight: 700;
+    font-size: 50px;
+    margin: 20px auto;
+    background: var(--linear);
+    background-clip: text;
+    color: transparent;
+}
+
+.cards {
+    background-color: aliceblue;
+    width: 60%;
+    height: fit-content;
+    margin-inline: auto;
+    padding-bottom: 20px;
+}
+
+.cards .task {
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 80%;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 4px 20px;
+    border-radius: 10px;
+}
+
+.task h3 {
+    font-weight: 400;
+    font-size: 20px;
+    color: rgba(0, 0, 0, .7);
+}
+
+.buttons {
+    display: flex;
+}
+
+.buttons button {
+    margin: 10px auto 10px;
+    font-size: 18px;
+    padding: 2px 20px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background:var(--linear);
+    transition: .3s;
+    color: white;
+    margin-left: 10px;
+}
+.buttons button:hover{
+    transform: scale(.9);
+}
+.buttons p {
+    color: rgb(213, 126, 4);
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+}

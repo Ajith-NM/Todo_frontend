@@ -1,0 +1,71 @@
+
+
+.loginform{
+    width: 720px;
+    font-family: "Titillium Web", sans-serif;
+    margin: 5% auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: aliceblue;
+    border: 2px solid  #42edea;
+     border-radius: 10px;
+     overflow: hidden;
+}
+
+.title {
+    /* #42edea */
+    font-weight: 700;
+    font-size: 60px;
+    margin: 50px auto;
+    background:var(--linear);
+    background-clip: text;
+    color: transparent;
+}
+
+.inputs {
+    width: 60%;
+}
+
+.input {
+    margin-bottom: 25px;
+}
+
+.input input {
+    width: 100%;
+    height: 40px;
+    border: none;
+   color: rgba(0,0,0,.7);
+    border-bottom: 2px solid rgba(0,0,0, 0.2);
+    outline: none;
+    font-size: 18px;
+    padding-left: 10px;
+    background: transparent;
+}
+.input span{
+    color: rgba(0,0,0,.7);
+}
+.button button{
+ margin:0px auto 10px;
+ font-size: 18px;
+ padding: 7px 40px;
+ border-radius: 20px;
+ border: none;
+ outline: none;
+ background:var(--linear);
+ transition: .3s;
+ color:white;
+} 
+
+.button button:hover{
+ transform:  scale(.9);
+}
+.loginform p{
+    margin-bottom: 50px;
+}
+.input p {
+    color: brown;
+    margin-top: 10px;
+    margin-left: 20px;
+}
