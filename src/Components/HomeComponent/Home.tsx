@@ -37,7 +37,7 @@ const Home = () => {
         })
       }
     }).catch(() => {
-      setGetMessage("something went wrong")
+      setGetMessage("something went wrong please refresh")
     })
   }, []);
 
