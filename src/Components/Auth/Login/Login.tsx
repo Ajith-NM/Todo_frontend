@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { request } from "../../AxiosConfig";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
 const Login = () => {
   const navigate = useNavigate();
@@ -26,7 +26,9 @@ const Login = () => {
           setErrMessage(res.data.status);
         }
       })
-      .catch(() => {
+      .catch((err:AxiosError) => {
+        console.log("Error res==",err);
+        
         setErrMessage("something went wrong");
       });
   };
