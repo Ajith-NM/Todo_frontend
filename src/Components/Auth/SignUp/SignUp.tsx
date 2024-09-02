@@ -39,8 +39,7 @@ const SignUp = () => {
         .catch(() => {
           setErrMessage("something went wrong");
         });
-    }
-    else{
+    } else {
       setErrMessage("please select a profile photo");
     }
   };

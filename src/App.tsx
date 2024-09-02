@@ -1,6 +1,5 @@
 import { BrowserRouter } from 'react-router-dom'
 import PageNavigation from './Routes/PageNavigation'
-import './App.css'
 
 function App() {
 

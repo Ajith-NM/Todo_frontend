@@ -1,4 +1,4 @@
-import { Routes, Route, } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "../Components/HomeComponent/Home";
 import Login from "../Components/Auth/Login/Login";
 import SignUp from "../Components/Auth/SignUp/SignUp";
@@ -15,7 +15,10 @@ function PageNavigation() {
       <Route path="/Signup" element={<SignUp />}></Route>
       <Route path="/home" element={<Home />}></Route>
       <Route path="/edit" element={<UpdateTodo />}></Route>
-      <Route path="/verification/:preComp" element={<EmailVerification/>}></Route>
+      <Route
+        path="/verification/:preComp"
+        element={<EmailVerification />}
+      ></Route>
       <Route path="/forgetPassword" element={<ForgetPassword />}></Route>
       <Route path="/resetPassword" element={<ResetPassword />}></Route>
 
