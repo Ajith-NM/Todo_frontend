@@ -13,7 +13,6 @@ const UpdateTodo = () => {
   const [status,setStatus]=useState<string>(task.status)
 
  const changeStatus=(id:number)=>{
- console.log(id);
   request.put(`task/statusUpdate/?id=${id}`,{status:status}).then((res:AxiosResponse)=>{
     if (res.data.response=== "task updated") {
       alert("status updated")

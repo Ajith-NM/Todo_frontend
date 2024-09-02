@@ -36,9 +36,7 @@ const Home = () => {
           return [...data.data.tasks]
         })
       }
-    }).catch((err) => {
-      console.log("error on res login",err);
-      
+    }).catch(() => {
       setGetMessage("something went wrong please refresh")
     })
   }, []);

@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./SignUp.css";
 import { useForm } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { request } from "../../AxiosConfig";
 
 const SignUp = () => {
@@ -27,8 +27,6 @@ const SignUp = () => {
     formdata.append("password", data.password);
     if (file) {
       formdata.append("image", file);
-      console.log(formdata.get("image"));
-
       await request
         .post("user/postSignup", formdata)
         .then((res: AxiosResponse) => {
@@ -38,9 +36,7 @@ const SignUp = () => {
             setErrMessage(res.data.status);
           }
         })
-        .catch((err: AxiosError) => {
-          console.log("error==", err.response?.data);
-
+        .catch(() => {
           setErrMessage("something went wrong");
         });
     }

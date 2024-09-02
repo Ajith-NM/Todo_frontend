@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { request } from "../../AxiosConfig";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useState } from "react";
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ const Login = () => {
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const onSubmit = (data: FormValues) => {
-    console.log("submitted", data);
     request
       .post("user/postLogin", data)
       .then((res: AxiosResponse) => {
@@ -26,9 +25,7 @@ const Login = () => {
           setErrMessage(res.data.status);
         }
       })
-      .catch((err:AxiosError) => {
-        console.log("Error res==",err);
-        
+      .catch(() => {
         setErrMessage("something went wrong");
       });
   };
