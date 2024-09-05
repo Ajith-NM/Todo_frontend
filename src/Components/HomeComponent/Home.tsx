@@ -53,7 +53,7 @@ const Home = () => {
     request
       .post("task/create", data)
       .then((data: AxiosResponse) => {
-        reset()
+        reset({})
         dispatch(removeLoader());
         if (data.data.status) {
           dispatch(addTask(data.data.response));
@@ -61,7 +61,7 @@ const Home = () => {
         }
       })
       .catch((err: AxiosError<Response>) => {
-        reset()
+        reset({})
         dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);
