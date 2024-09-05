@@ -29,14 +29,8 @@ const UpdateTodo = () => {
   const [task, setTask] = useState<Task>();
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [status, setStatus] = useState<string>();
-  //const [getMessage, setGetMessage] = useState("");
-  // const task = useSelector((state: RootState) =>
-  //   state.newTask.task.filter((t) => t.task_Id == +params.id!)
-  // );
 
   useEffect(() => {
-    console.log(params.id);
-
     request
       .get(`task/getTask/${+params.id!}`)
       .then((data: AxiosResponse) => {
