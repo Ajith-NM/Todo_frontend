@@ -3,7 +3,7 @@ import "./Login.css";
 import { useForm } from "react-hook-form";
 import { request } from "../../AxiosConfig";
 import { AxiosError, AxiosResponse } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../Loader";
 import { addLoader, removeLoader } from "../../../redux/Actions/LoadingSlice";
 import { RootState } from "../../../redux/store";
@@ -32,6 +32,11 @@ const Login = () => {
   const [errMessage, setErrMessage] = useState("");
   const { register, handleSubmit, formState,reset } = useForm<FormValues>();
   const { errors } = formState;
+  useEffect(()=>{
+    if (localStorage.getItem("user")) {
+      navigate("/home")
+    }
+  })
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader())
     request
