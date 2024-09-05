@@ -32,17 +32,14 @@ const Home = () => {
   const { errors } = formState;
 
   useEffect(() => {
-    dispatch(addLoader())
     request
       .get("task/home")
       .then((data: AxiosResponse) => {
         if (data.data.status) {
           dispatch(addAllTask(data.data.response));
         }
-        dispatch(removeLoader())
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader())
         const errorRes = err.response?.data.response;
         setGetMessage(errorRes!);
       });
@@ -64,6 +61,7 @@ const Home = () => {
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
+      reset()
   };
 
   const onDelete = (id: number) => {
