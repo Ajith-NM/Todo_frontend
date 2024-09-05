@@ -33,9 +33,11 @@ const Login = () => {
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const onSubmit = (data: FormValues) => {
+    dispatch(addLoader())
     request
       .post("user/postLogin", data)
       .then((res: AxiosResponse) => {
+        dispatch(removeLoader())
         localStorage.setItem("user", res.data.user.profilePic);
         navigate("/home");
       })
