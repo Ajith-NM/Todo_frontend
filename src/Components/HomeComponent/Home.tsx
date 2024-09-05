@@ -54,14 +54,14 @@ const Home = () => {
       .post("task/create", data)
       .then((data: AxiosResponse) => {
         dispatch(removeLoader());
-        reset({})
+        reset()
         if (data.data.status) {
           dispatch(addTask(data.data.response));
           setGetMessage("");
         }
       })
       .catch((err: AxiosError<Response>) => {
-        reset({})
+        reset()
         dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);
