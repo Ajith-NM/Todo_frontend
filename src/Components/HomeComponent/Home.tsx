@@ -53,8 +53,8 @@ const Home = () => {
     request
       .post("task/create", data)
       .then((data: AxiosResponse) => {
-        reset({})
         dispatch(removeLoader());
+        reset({})
         if (data.data.status) {
           dispatch(addTask(data.data.response));
           setGetMessage("");
