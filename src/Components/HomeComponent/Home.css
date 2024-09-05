@@ -7,15 +7,12 @@
 .container .Todoinputs {
   background-color: aliceblue;
   margin-inline: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   width: 60%;
 }
 
 .Todoinputs button {
   margin: 10px auto 10px;
+  margin-left: 10%;
   font-size: 18px;
   padding: 7px 40px;
   border-radius: 10px;
@@ -24,12 +21,12 @@
   background: var(--linear);
   transition: 0.3s;
   color: white;
-  transform: translateX(-170%);
+  
   transition: 0.5s;
 }
 
 .Todoinputs button:hover {
-  transform: translateX(-170%) scale(0.95);
+  transform: scale(0.95);
 }
 
 .Todoinputs input {
@@ -44,6 +41,7 @@
   padding-left: 10px;
   background: transparent;
   margin: 0px auto 10px;
+  margin-left: 10%;
 }
 
 .Todoinputs h3 {
@@ -53,6 +51,7 @@
   background: var(--linear);
   background-clip: text;
   color: transparent;
+  text-align: center;
 }
 
 .cards {

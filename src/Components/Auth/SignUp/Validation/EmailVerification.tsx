@@ -5,38 +5,55 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../../AxiosConfig";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import {
+  addLoader,
+  removeLoader,
+} from "../../../../redux/Actions/LoadingSlice";
+import Loader from "../../../Loader";
+
+type FormValues = {
+  otp: string;
+};
+type Response = {
+  status: boolean;
+  msg: string;
+};
+
 const EmailVerification = () => {
   const { preComp } = useParams();
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate();
-  type FormValues = {
-    otp: string;
-  };
+  const dispatch = useDispatch();
+  const loader = useSelector((state: RootState) => state.loader.loader);
+
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
-  const onsubmit = (data: FormValues) => {
+  const onSubmit = (data: FormValues) => {
+    dispatch(addLoader());
     request
       .post("user/emailVerification", data)
       .then((data: AxiosResponse) => {
-        console.log(data.data.result);
-        if (data.data.result === "email verified successfully") {
+        dispatch(removeLoader());
+        if (data.data.status) {
           if (preComp === "Signup") {
             navigate("/");
           } else {
             navigate("/resetPassword");
           }
-        } else {
-          setErrMessage(data.data.result);
         }
       })
-      .catch((err: AxiosError) => {
-        console.log(err.response?.data);
-        setErrMessage("something went wrong");
+      .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader());
+        const errorRes = err.response?.data.msg;
+        setErrMessage(errorRes!);
       });
   };
   return (
     <>
-      <form className="loginform validation" onSubmit={handleSubmit(onsubmit)}>
+      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)}>
+        {loader && <Loader />}
         <div className="inputTag">
           <p>Please enter the OTP that send to your email. </p>
           <input

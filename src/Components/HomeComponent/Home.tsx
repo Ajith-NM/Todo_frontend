@@ -3,81 +3,89 @@ import NavBar from "../HeaderComponent/NavBar";
 import "./Home.css";
 import { useEffect, useState } from "react";
 import { request } from "../AxiosConfig";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { addTask } from "../../redux/Actions/TaskSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask, addAllTask, removeTask } from "../../redux/Actions/TaskSlice";
+import { addLoader, removeLoader } from "../../redux/Actions/LoadingSlice";
+import { RootState } from "../../redux/store";
+import Loader from "../Loader";
+
+type FormValues = {
+  title: string;
+  description: string;
+};
+type Response = {
+  status: boolean;
+  response: string;
+};
 
 const Home = () => {
-  type Task = {
-    task_Id: number;
-    title: string;
-    description: string;
-    status: string;
-    user_Id: number;
-    createdAt: string;
-    updatedAt: string;
-  };
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [getTask, setGetTask] = useState<Task[]>([]);
+  const loader = useSelector((state: RootState) => state.loader.loader);
+  const getTask = useSelector((state: RootState) =>
+    state.newTask.task.filter((t) => t.task_Id !== 0)
+  );
   const [getMessage, setGetMessage] = useState("");
+  const { register, handleSubmit, formState } = useForm<FormValues>();
+  const { errors } = formState;
 
   useEffect(() => {
     request
       .get("task/home")
       .then((data: AxiosResponse) => {
-        if (data.data.tasks === "please create a new task") {
-          setGetMessage("please create a new task");
-        } else {
-          setGetTask(() => {
-            return [...data.data.tasks];
-          });
+        if (data.data.status) {
+          dispatch(addAllTask(data.data.response));
         }
       })
-      .catch(() => {
-        setGetMessage("something went wrong please refresh");
+      .catch((err: AxiosError<Response>) => {
+        const errorRes = err.response?.data.response;
+        setGetMessage(errorRes!);
       });
-  }, []);
-
-  type FormValues = {
-    title: string;
-    description: string;
-  };
-
-  const { register, handleSubmit, formState } = useForm<FormValues>();
-  const { errors } = formState;
+  }, [dispatch]);
 
   const onSubmit = (data: FormValues) => {
+    dispatch(addLoader());
     request
       .post("task/create", data)
       .then((data: AxiosResponse) => {
-        if (data.data.response === "new task added") {
-          alert("new task added");
-          window.location.reload();
-        } else {
-          alert(data.data.response);
+        dispatch(removeLoader());
+        if (data.data.status) {
+          dispatch(addTask(data.data.response));
+          setGetMessage("");
         }
       })
-      .catch(() => alert("something went wrong"));
+      .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader());
+        const errorRes = err.response?.data.response;
+        alert(errorRes);
+      });
   };
 
   const onDelete = (id: number) => {
-    request.delete(`task/deleteTask?id=${id}`).then((res: AxiosResponse) => {
-      if (res.data.response === "task deleted") {
-        alert(res.data.response);
-        window.location.reload();
-      } else {
-        alert(res.data.response);
-      }
-    });
+    dispatch(addLoader());
+    request
+      .delete(`task/deleteTask?id=${id}`)
+      .then((res: AxiosResponse) => {
+        dispatch(removeLoader());
+        if (res.data.status) {
+          dispatch(removeTask(id));
+          alert(res.data.response);
+        }
+      })
+      .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader());
+        const errorRes = err.response?.data.response;
+        alert(errorRes);
+      });
   };
   return (
     <>
       <NavBar></NavBar>
       <div className="container">
         <form className="Todoinputs" onSubmit={handleSubmit(onSubmit)}>
+          {loader && <Loader />}
           <h3>TODO LIST</h3>
           <input
             type="text"
@@ -123,8 +131,8 @@ const Home = () => {
                   <button onClick={() => onDelete(task.task_Id)}>delete</button>
                   <button
                     onClick={() => {
-                      dispatch(addTask(task));
-                      return navigate("/edit");
+                      //dispatch(addTask(task));
+                      return navigate(`/edit/${task.task_Id}`);
                     }}
                   >
                     edit

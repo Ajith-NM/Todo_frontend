@@ -2,32 +2,50 @@ import { useNavigate } from "react-router-dom";
 import "./Validation.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { request } from "../../../AxiosConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import {
+  addLoader,
+  removeLoader,
+} from "../../../../redux/Actions/LoadingSlice";
+import Loader from "../../../Loader";
+
+type FormValues = {
+  password: string[];
+};
+type Response = {
+  status: boolean;
+  msg: string;
+};
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-  type FormValues = {
-    password: string[];
-  };
-
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
     if (data.password[0] === data.password[1]) {
+      dispatch(addLoader());
       request
         .put("user/resetPassword", { password: data.password[0] })
         .then((data: AxiosResponse) => {
-          console.log(data.data.response);
-          if (data.data.response === "updated") {
+          dispatch(removeLoader());
+          if (data.data.status) {
             navigate("/");
           } else {
-            setErrMessage(data.data.response);
+            setErrMessage("failed to reset password");
           }
         })
-        .catch(() => setErrMessage("something went wrong"));
+        .catch((err: AxiosError<Response>) => {
+          dispatch(removeLoader());
+          const errorRes = err.response?.data.msg;
+          setErrMessage(errorRes!);
+        });
     } else {
       setErrMessage("please enter same password");
     }
@@ -36,6 +54,7 @@ const ResetPassword = () => {
   return (
     <>
       <form className="loginform validation" onSubmit={handleSubmit(onSubmit)}>
+        {loader && <Loader />}
         <div className="inputTag">
           <p>Add a strong password. </p>
           <input

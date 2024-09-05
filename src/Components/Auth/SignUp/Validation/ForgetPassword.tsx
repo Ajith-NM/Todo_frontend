@@ -1,37 +1,54 @@
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { request } from "../../../AxiosConfig";
 import "./Validation.css";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import {
+  addLoader,
+  removeLoader,
+} from "../../../../redux/Actions/LoadingSlice";
+import Loader from "../../../Loader";
+
+type FormValues = {
+  email: string;
+};
+type Response = {
+  status: boolean;
+  msg: string;
+};
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-  type FormValues = {
-    email: string;
-  };
-
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
+    dispatch(addLoader());
     request
       .post("user/forgetPassword", data)
       .then((data: AxiosResponse) => {
-        //  console.log(data.data.result);
-        if (data.data.response === "verify your email by entering the otp") {
+        dispatch(removeLoader());
+        if (data.data.status) {
           navigate("/verification/Forget");
-        } else {
-          setErrMessage(data.data.response);
         }
       })
-      .catch(() => setErrMessage("something went wrong"));
+      .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader());
+        const errorRes = err.response?.data.msg;
+        setErrMessage(errorRes!);
+      });
   };
 
   return (
     <>
       <form className="loginform validation" onSubmit={handleSubmit(onSubmit)}>
+        {loader && <Loader />}
         <div className="inputTag">
           <p>Please enter your email. </p>
           <input
