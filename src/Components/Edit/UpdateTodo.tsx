@@ -1,31 +1,48 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./UpdateTodo.css";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 import { useState } from "react";
 import { request } from "../AxiosConfig";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import Loader from "../Loader";
+import { addLoader, removeLoader } from "../../redux/Actions/LoadingSlice";
+
+type Response = {
+  status: boolean;
+  response: string;
+};
 
 const UpdateTodo = () => {
+  const params = useParams();
   const navigate = useNavigate();
-  const task = useSelector((state: RootState) => state.newTask.task);
-  const [status, setStatus] = useState<string>(task.status);
-
+  const dispatch = useDispatch();
+  const task = useSelector((state: RootState) =>
+    state.newTask.task.filter((t) => t.task_Id == +params.id!)
+  );
+  const loader = useSelector((state: RootState) => state.loader.loader);
+  const [status, setStatus] = useState<string>(task[0].status);
   const changeStatus = (id: number) => {
+    dispatch(addLoader());
     request
       .put(`task/statusUpdate/?id=${id}`, { status: status })
       .then((res: AxiosResponse) => {
-        if (res.data.response === "task updated") {
-          alert("status updated");
-        } else {
-          alert("failed to update status");
+        dispatch(removeLoader());
+        if (res.data.status) {
+          navigate("/home");
         }
+      })
+      .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader());
+        const errorRes = err.response?.data.response;
+        alert(errorRes);
       });
   };
 
   return (
     <>
+      {loader && <Loader />}
+
       <div className="loginform">
         <div
           className="goback"
@@ -36,8 +53,8 @@ const UpdateTodo = () => {
           {" "}
           <i className="bx bx-left-arrow-alt"></i>
         </div>
-        <h1 className="title">{task.title}</h1>
-        <p>{task.description}</p>
+        <h1 className="title">{task[0].title}</h1>
+        <p>{task[0].description}</p>
         <div className="UpdateInputs">
           <select
             className="input"
@@ -49,7 +66,7 @@ const UpdateTodo = () => {
             <option value="pending">pending</option>
             <option value="completed">completed</option>
           </select>
-          <button onClick={() => changeStatus(task.task_Id)}>Save</button>
+          <button onClick={() => changeStatus(task[0].task_Id)}>Save</button>
         </div>
       </div>
     </>

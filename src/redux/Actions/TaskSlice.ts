@@ -10,34 +10,39 @@ type Task = {
   updatedAt: string;
 };
 export interface TaskState {
-  task: Task;
+  task: Task[];
 }
 
 const initialState: TaskState = {
-  task: {
-    task_Id: 0,
-    title: "",
-    description: "",
-    status: "",
-    user_Id: 0,
-    createdAt: "",
-    updatedAt: "",
-  },
+  task: [
+    {
+      task_Id: 0,
+      title: "",
+      description: "",
+      status: "",
+      user_Id: 0,
+      createdAt: "",
+      updatedAt: "",
+    },
+  ],
 };
 
 export const taskSlice = createSlice({
   name: "Task",
   initialState,
   reducers: {
-    addTask: (state, action: PayloadAction<Task>) => {
-      state.task = action.payload;
+    addAllTask: (state, action: PayloadAction<Task[]>) => {
+      state.task = [...action.payload];
     },
-    removeTask: (state) => {
-      state.task = initialState.task;
+    addTask: (state, action: PayloadAction<Task>) => {
+      state.task = [...state.task, action.payload];
+    },
+    removeTask: (state, action: PayloadAction<number>) => {
+      state.task = state.task.filter((task) => task.task_Id !== action.payload);
     },
   },
 });
 
-export const { addTask, removeTask } = taskSlice.actions;
+export const { addTask, removeTask, addAllTask } = taskSlice.actions;
 
 export default taskSlice.reducer;
