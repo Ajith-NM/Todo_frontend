@@ -2,37 +2,87 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useForm } from "react-hook-form";
 import { request } from "../../AxiosConfig";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
+import Loader from "../../Loader";
+import { addLoader, removeLoader } from "../../../redux/Actions/LoadingSlice";
+import { RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+type Decoded = {
+  email: string;
+};
+
+type Response = {
+  status: boolean;
+  msg: string;
+};
+
 const Login = () => {
   const navigate = useNavigate();
-  type FormValues = {
-    email: string;
-    password: string;
-  };
+  const dispatch = useDispatch();
+  const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const onSubmit = (data: FormValues) => {
     request
       .post("user/postLogin", data)
       .then((res: AxiosResponse) => {
-        if (res.data.status === "success") {
-          localStorage.setItem("user", res.data.user.profilePic);
-          navigate("/home");
-        } else {
-          setErrMessage(res.data.status);
-        }
+        localStorage.setItem("user", res.data.user.profilePic);
+        navigate("/home");
       })
-      .catch(() => {
-        setErrMessage("something went wrong");
+      .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader());
+        const errorRes = err.response?.data.msg;
+        setErrMessage(errorRes!);
       });
+  };
+
+  const onGoogleAuthSubmit = async (data: CredentialResponse) => {
+    dispatch(addLoader());
+    const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
+    if (userData) {
+      await request
+        .post("user/postLogin/Auth", userData)
+        .then((res: AxiosResponse) => {
+          dispatch(removeLoader());
+          if (res.data.status) {
+            localStorage.setItem("user", res.data.user.profilePic);
+            navigate("/home");
+          }
+        })
+        .catch((err: AxiosError<Response>) => {
+          dispatch(removeLoader());
+          if (!err.response?.data.status) {
+            const errorRes = err.response?.data.msg;
+            setErrMessage(errorRes!);
+          }
+          setErrMessage("something went wrong ");
+        });
+    }
   };
 
   return (
     <form className="loginform" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="title">Welcome Back</h1>
+      {loader && <Loader />}
+      <GoogleLogin
+        text="continue_with"
+        onSuccess={(credentialResponse) =>
+          onGoogleAuthSubmit(credentialResponse)
+        }
+        onError={() => {
+          console.log("Login Failed");
+        }}
+      />
       <div className="inputs">
         {/* email */}
         <div className="input">

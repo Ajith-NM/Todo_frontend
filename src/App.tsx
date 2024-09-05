@@ -1,16 +1,14 @@
-import { BrowserRouter } from 'react-router-dom'
-import PageNavigation from './Routes/PageNavigation'
+import { BrowserRouter } from "react-router-dom";
+import PageNavigation from "./Routes/PageNavigation";
 
 function App() {
-
   return (
     <>
       <BrowserRouter>
-        <PageNavigation></PageNavigation>
+        <PageNavigation />
       </BrowserRouter>
-    
     </>
-  )
+  );
 }
 
-export default App
+export default App;
