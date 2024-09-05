@@ -32,14 +32,17 @@ const Home = () => {
   const { errors } = formState;
 
   useEffect(() => {
+    dispatch(addLoader());
     request
       .get("task/home")
       .then((data: AxiosResponse) => {
+        dispatch(removeLoader());
         if (data.data.status) {
           dispatch(addAllTask(data.data.response));
         }
       })
       .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader())
         const errorRes = err.response?.data.response;
         setGetMessage(errorRes!);
       });
@@ -97,7 +100,7 @@ const Home = () => {
               },
             })}
           />
-          <p style={{ color: "brown" }}>{errors.title?.message}</p>
+          <p style={{ color: "brown",marginLeft:"10%" ,marginBottom:"10px"}}>{errors.title?.message}</p>
           <input
             type="text"
             placeholder="Add a short discription"

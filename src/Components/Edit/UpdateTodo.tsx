@@ -31,19 +31,22 @@ const UpdateTodo = () => {
   const [status, setStatus] = useState<string>();
 
   useEffect(() => {
+    dispatch(addLoader())
     request
       .get(`task/getTask/${+params.id!}`)
       .then((data: AxiosResponse) => {
+        dispatch(removeLoader())
         if (data.data.status) {
           setTask(data.data.response);
           setStatus(data.data.response.status)
         }
       })
       .catch((err: AxiosError<Response>) => {
+        dispatch(removeLoader())
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
-  }, [params.id]);
+  }, [params.id,dispatch]);
 
   const changeStatus = () => {
     dispatch(addLoader());
