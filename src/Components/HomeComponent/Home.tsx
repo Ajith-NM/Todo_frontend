@@ -64,7 +64,6 @@ const Home = () => {
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
-      reset()
   };
 
   const onDelete = (id: number) => {
