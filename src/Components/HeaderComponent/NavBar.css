@@ -29,6 +29,10 @@ nav h3 {
   outline: none;
   background: var(--linear);
   color: white;
+  transition: .5s;
+}
+.loginButton:hover{
+  transform: scale(0.95);
 }
 nav .UserProfile {
   margin-right: 50px;

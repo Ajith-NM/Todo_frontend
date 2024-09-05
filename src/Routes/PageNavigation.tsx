@@ -7,18 +7,18 @@ import PageNotFound from "../Components/PageNotFound";
 import EmailVerification from "../Components/Auth/SignUp/Validation/EmailVerification";
 import ForgetPassword from "../Components/Auth/SignUp/Validation/ForgetPassword";
 import ResetPassword from "../Components/Auth/SignUp/Validation/ResetPassword";
+import PrivateRoute from "./PrivateRoute";
 
 function PageNavigation() {
   return (
     <Routes>
       <Route path="/" element={<Login />}></Route>
       <Route path="/Signup" element={<SignUp />}></Route>
-      <Route path="/home" element={<Home />}></Route>
-      <Route path="/edit" element={<UpdateTodo />}></Route>
-      <Route
-        path="/verification/:preComp"
-        element={<EmailVerification />}
-      ></Route>
+      <Route element={<PrivateRoute />}>
+        <Route path="/home" element={<Home />}></Route>
+        <Route path="/edit/:id" element={<UpdateTodo />}></Route>
+      </Route>
+      <Route  path="/verification/:preComp" element={<EmailVerification />}></Route>
       <Route path="/forgetPassword" element={<ForgetPassword />}></Route>
       <Route path="/resetPassword" element={<ResetPassword />}></Route>
 

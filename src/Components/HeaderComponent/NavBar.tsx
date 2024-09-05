@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 import { useEffect, useState } from "react";
+
 const NavBar = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState("");
@@ -18,14 +19,15 @@ const NavBar = () => {
           <button
             className="loginButton"
             onClick={() => {
+              localStorage.removeItem("user");
               navigate("/");
             }}
           >
-            Login
+            LogOut
           </button>
 
           <div className="UserProfile">
-            <img src={profile} alt="" />
+            <img src={profile} alt=" profile image" />
           </div>
         </div>
       </nav>
