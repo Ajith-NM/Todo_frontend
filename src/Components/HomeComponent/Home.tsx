@@ -28,7 +28,7 @@ const Home = () => {
     state.newTask.task.filter((t) => t.task_Id !== 0)
   );
   const [getMessage, setGetMessage] = useState("");
-  const { register, handleSubmit, formState } = useForm<FormValues>();
+  const { register, handleSubmit, formState,reset } = useForm<FormValues>();
   const { errors } = formState;
 
   useEffect(() => {
@@ -53,6 +53,7 @@ const Home = () => {
     request
       .post("task/create", data)
       .then((data: AxiosResponse) => {
+        reset()
         dispatch(removeLoader());
         if (data.data.status) {
           dispatch(addTask(data.data.response));
@@ -60,6 +61,7 @@ const Home = () => {
         }
       })
       .catch((err: AxiosError<Response>) => {
+        reset()
         dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);

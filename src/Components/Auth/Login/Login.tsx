@@ -30,18 +30,20 @@ const Login = () => {
   const dispatch = useDispatch();
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-  const { register, handleSubmit, formState } = useForm<FormValues>();
+  const { register, handleSubmit, formState,reset } = useForm<FormValues>();
   const { errors } = formState;
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader())
     request
       .post("user/postLogin", data)
       .then((res: AxiosResponse) => {
+        reset()
         dispatch(removeLoader())
         localStorage.setItem("user", res.data.user.profilePic);
         navigate("/home");
       })
       .catch((err: AxiosError<Response>) => {
+        reset()
         dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
         setErrMessage(errorRes!);

@@ -37,7 +37,7 @@ const SignUp = () => {
   const [errMessage, setErrMessage] = useState<string>("");
   const loader = useSelector((state: RootState) => state.loader.loader);
 
-  const { register, handleSubmit, formState } = useForm<FormValues>();
+  const { register, handleSubmit, formState,reset} = useForm<FormValues>();
   const { errors } = formState;
   const formdata = new FormData();
 
@@ -52,12 +52,14 @@ const SignUp = () => {
       await request
         .post("user/postSignup", formdata)
         .then((res: AxiosResponse) => {
+          reset()
           dispatch(removeLoader());
           if (res.data.status) {
             navigate("/verification/Signup");
           }
         })
         .catch((err: AxiosError<Response>) => {
+          reset()
           dispatch(removeLoader());
           if (!err.response?.data.status) {
             const errorRes = err.response?.data.msg;
