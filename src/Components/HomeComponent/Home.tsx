@@ -43,7 +43,7 @@ const Home = () => {
         const errorRes = err.response?.data.response;
         setGetMessage(errorRes!);
       });
-  }, [dispatch]);
+  }, [dispatch,getTask]);
 
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
