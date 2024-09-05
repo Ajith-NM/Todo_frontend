@@ -120,7 +120,11 @@ const SignUp = () => {
         onError={() => {
           console.log("Login Failed");
         }}
+        shape="pill"
+        theme="filled_blue"
+        type="icon"
       />
+      <p style={{marginBottom:"20px",marginTop:"10px"}}>OR</p>
 
       <div className="inputs">
         <div className="profile">

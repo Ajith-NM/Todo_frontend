@@ -13,11 +13,11 @@
 }
 
 .signupform .title {
-  margin: 30px auto 10px;
+  margin: 20px auto 25px;
 }
 
 .signupform p {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .inputs .input {
@@ -25,7 +25,7 @@
 }
 
 .profile {
-  margin: 15px auto;
+  margin: 0px auto 15px;
   width: 80px;
   height: 80px;
   position: relative;

@@ -74,15 +74,21 @@ const Login = () => {
     <form className="loginform" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="title">Welcome Back</h1>
       {loader && <Loader />}
-      <GoogleLogin
-        text="continue_with"
+      <GoogleLogin  
+        text='signin'
         onSuccess={(credentialResponse) =>
           onGoogleAuthSubmit(credentialResponse)
         }
         onError={() => {
           console.log("Login Failed");
         }}
+        shape="pill"
+        theme="filled_blue"
+        type="icon"
+        
       />
+
+      <p style={{marginTop:"20px"}}>OR</p>
       <div className="inputs">
         {/* email */}
         <div className="input">
