@@ -35,7 +35,7 @@ const Login = () => {
         {}
       )
   );
-  console.log(cookies);
+  console.log(document.cookie);
   
   const resCookie: Record<string, string> = JSON.parse(
     JSON.stringify(cookies.current)
