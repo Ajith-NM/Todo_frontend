@@ -23,8 +23,6 @@ type Response = {
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const c = document.cookie.split(";")
-  console.log("cookies==",c);
   const loader = useSelector((state: RootState) => state.loader.loader);
   const getTask = useSelector((state: RootState) =>
     state.newTask.task.filter((t) => t.task_Id !== 0)
@@ -45,7 +43,7 @@ const Home = () => {
         const errorRes = err.response?.data.response;
         setGetMessage(errorRes!);
       });
-  }, [getTask,dispatch]);
+  }, [dispatch]);
 
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());

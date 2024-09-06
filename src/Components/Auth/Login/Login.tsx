@@ -3,7 +3,7 @@ import "./Login.css";
 import { useForm } from "react-hook-form";
 import { request } from "../../AxiosConfig";
 import { AxiosError, AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "../../Loader";
 import { addLoader, removeLoader } from "../../../redux/Actions/LoadingSlice";
 import { RootState } from "../../../redux/store";
@@ -24,33 +24,50 @@ type Response = {
   status: boolean;
   msg: string;
 };
-
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cookies = useRef(
+    document.cookie
+      .split(";")
+      .reduce(
+        (ac, cv) => Object.assign(ac, { [cv.split("=")[0]]: cv.split("=")[1] }),
+        {}
+      )
+  );
+  const resCookie: Record<string, string> = JSON.parse(
+    JSON.stringify(cookies.current)
+  );
+  const token = resCookie[" token"];
+  const decodedToken: { exp: number } = jwtDecode<{ exp: number }>(token);
+  console.log("decoded Token=", decodedToken.exp);
+  const currentTime = Date.now() / 1000;
+  const userLogged = useRef(currentTime < decodedToken.exp);
+
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-  const { register, handleSubmit, formState,reset } = useForm<FormValues>();
+  const { register, handleSubmit, formState, reset } = useForm<FormValues>();
   const { errors } = formState;
-  useEffect(()=>{
-    const c = document.cookie
-    console.log("cookies==",c);
-    if (localStorage.getItem("user")) {
-      navigate("/home")
+
+  useEffect(() => {
+    if (userLogged && localStorage.getItem("user")) {
+      console.log("hii");
+      navigate("/home");
     }
-  },[navigate])
+  }, [navigate]);
+
   const onSubmit = (data: FormValues) => {
-    dispatch(addLoader())
+    dispatch(addLoader());
     request
       .post("user/postLogin", data)
       .then((res: AxiosResponse) => {
-        reset()
-        dispatch(removeLoader())
+        reset();
+        dispatch(removeLoader());
         localStorage.setItem("user", res.data.user.profilePic);
         navigate("/home");
       })
       .catch((err: AxiosError<Response>) => {
-        reset()
+        reset();
         dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
         setErrMessage(errorRes!);
@@ -85,8 +102,8 @@ const Login = () => {
     <form className="loginform" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="title">Welcome Back</h1>
       {loader && <Loader />}
-      <GoogleLogin  
-        text='signin'
+      <GoogleLogin
+        text="signin"
         onSuccess={(credentialResponse) =>
           onGoogleAuthSubmit(credentialResponse)
         }
@@ -96,10 +113,9 @@ const Login = () => {
         shape="pill"
         theme="filled_blue"
         type="icon"
-        
       />
 
-      <p style={{marginTop:"20px"}}>OR</p>
+      <p style={{ marginTop: "20px" }}>OR</p>
       <div className="inputs">
         {/* email */}
         <div className="input">
