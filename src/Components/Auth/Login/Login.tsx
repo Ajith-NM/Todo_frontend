@@ -38,7 +38,7 @@ const Login = () => {
     if ( localStorage.getItem("user")) {
       navigate("/home");
     }
-  },);
+  },[navigate]);
   
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
