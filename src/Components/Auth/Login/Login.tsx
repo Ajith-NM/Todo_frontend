@@ -24,9 +24,12 @@ type Response = {
   status: boolean;
   msg: string;
 };
+
 const Login = () => {
+  localStorage.removeItem("userLogged")
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let  userLogged:boolean
   const cookies = useRef(
     document.cookie
       .split(";")
@@ -35,16 +38,18 @@ const Login = () => {
         {}
       )
   );
-  console.log(document.cookie);
-  
-  const resCookie: Record<string, string> = JSON.parse(
+if (localStorage.getItem('user')) {
+  console.log(cookies);
+   const resCookie: Record<string, string> = JSON.parse(
     JSON.stringify(cookies.current)
   );
   const token = resCookie[" token"];
   const decodedToken: { exp: number } = jwtDecode<{ exp: number }>(token);
   console.log("decoded Token=", decodedToken.exp);
   const currentTime = Date.now() / 1000;
-  const userLogged = useRef(currentTime < decodedToken.exp);
+   userLogged =currentTime < decodedToken.exp;
+ 
+}
 
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
@@ -56,8 +61,8 @@ const Login = () => {
       console.log("hii");
       navigate("/home");
     }
-  }, [navigate]);
-
+  }, []);
+  
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
     request
