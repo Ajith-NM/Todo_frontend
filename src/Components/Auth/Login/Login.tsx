@@ -75,14 +75,10 @@ const Login = () => {
           }
         })
         .catch((err: AxiosError<Response>) => {
-          console.log("err",err);
-          
           dispatch(removeLoader());
-          if (!err.response?.data.status) {
             const errorRes = err.response?.data.msg;
             setErrMessage(errorRes!);
-          }
-          setErrMessage("something went wrong ");
+         
         });
     }
   };
