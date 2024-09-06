@@ -33,6 +33,9 @@ const Login = () => {
   const { register, handleSubmit, formState,reset } = useForm<FormValues>();
   const { errors } = formState;
   useEffect(()=>{
+    const c = document.cookie.split(";")
+    console.log("cookies==",c);
+
     if (localStorage.getItem("user")) {
       navigate("/home")
     }

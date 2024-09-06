@@ -25,7 +25,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const c = document.cookie.split(";")
   console.log("cookies==",c);
-  
   const loader = useSelector((state: RootState) => state.loader.loader);
   const getTask = useSelector((state: RootState) =>
     state.newTask.task.filter((t) => t.task_Id !== 0)
