@@ -33,13 +33,12 @@ const Login = () => {
   const { register, handleSubmit, formState,reset } = useForm<FormValues>();
   const { errors } = formState;
   useEffect(()=>{
-    const c = document.cookie.split(";")
+    const c = document.cookie
     console.log("cookies==",c);
-
     if (localStorage.getItem("user")) {
       navigate("/home")
     }
-  })
+  },[navigate])
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader())
     request
