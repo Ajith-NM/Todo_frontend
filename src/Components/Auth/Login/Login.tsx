@@ -61,7 +61,7 @@ if (localStorage.getItem('user')) {
       console.log("hii");
       navigate("/home");
     }
-  }, []);
+  }, [navigate]);
   
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
@@ -88,6 +88,8 @@ if (localStorage.getItem('user')) {
       await request
         .post("user/postLogin/Auth", userData)
         .then((res: AxiosResponse) => {
+          console.log("res",res);
+          
           dispatch(removeLoader());
           if (res.data.status) {
             localStorage.setItem("user", res.data.user.profilePic);
@@ -95,6 +97,8 @@ if (localStorage.getItem('user')) {
           }
         })
         .catch((err: AxiosError<Response>) => {
+          console.log("err",err);
+          
           dispatch(removeLoader());
           if (!err.response?.data.status) {
             const errorRes = err.response?.data.msg;
