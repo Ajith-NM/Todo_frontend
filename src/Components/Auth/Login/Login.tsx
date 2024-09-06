@@ -29,7 +29,7 @@ const Login = () => {
   localStorage.removeItem("userLogged")
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let  userLogged:boolean
+  let  userLogged:boolean=false
   const cookies = useRef(
     document.cookie
       .split(";")
@@ -38,8 +38,10 @@ const Login = () => {
         {}
       )
   );
+  console.log(cookies.current);
 if (localStorage.getItem('user')) {
-  console.log(cookies);
+  console.log("hii");
+  
    const resCookie: Record<string, string> = JSON.parse(
     JSON.stringify(cookies.current)
   );
@@ -61,7 +63,7 @@ if (localStorage.getItem('user')) {
       console.log("hii");
       navigate("/home");
     }
-  }, [navigate]);
+  }, [navigate,userLogged]);
   
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
