@@ -42,8 +42,12 @@ const Home = () => {
       .catch((err: AxiosError<Response>) => {
         const errorRes = err.response?.data.response;
         setGetMessage(errorRes!);
+        if (errorRes==="failed") {
+          localStorage.removeItem('user')
+          navigate("/")
+        }
       });
-  }, [dispatch]);
+  }, [dispatch,navigate]);
 
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());

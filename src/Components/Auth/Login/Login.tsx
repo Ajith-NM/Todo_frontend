@@ -3,7 +3,7 @@ import "./Login.css";
 import { useForm } from "react-hook-form";
 import { request } from "../../AxiosConfig";
 import { AxiosError, AxiosResponse } from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../Loader";
 import { addLoader, removeLoader } from "../../../redux/Actions/LoadingSlice";
 import { RootState } from "../../../redux/store";
@@ -26,32 +26,8 @@ type Response = {
 };
 
 const Login = () => {
-  localStorage.removeItem("userLogged")
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let  userLogged:boolean=false
-  const cookies = useRef(
-    document.cookie
-      .split(";")
-      .reduce(
-        (ac, cv) => Object.assign(ac, { [cv.split("=")[0]]: cv.split("=")[1] }),
-        {}
-      )
-  );
-  console.log(cookies.current);
-if (localStorage.getItem('user')) {
-  console.log("hii");
-  
-   const resCookie: Record<string, string> = JSON.parse(
-    JSON.stringify(cookies.current)
-  );
-  const token = resCookie[" token"];
-  const decodedToken: { exp: number } = jwtDecode<{ exp: number }>(token);
-  console.log("decoded Token=", decodedToken.exp);
-  const currentTime = Date.now() / 1000;
-   userLogged =currentTime < decodedToken.exp;
- 
-}
 
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
@@ -59,11 +35,10 @@ if (localStorage.getItem('user')) {
   const { errors } = formState;
 
   useEffect(() => {
-    if (userLogged && localStorage.getItem("user")) {
-      console.log("hii");
+    if ( localStorage.getItem("user")) {
       navigate("/home");
     }
-  }, [navigate,userLogged]);
+  },);
   
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
@@ -83,6 +58,7 @@ if (localStorage.getItem('user')) {
       });
   };
 
+  
   const onGoogleAuthSubmit = async (data: CredentialResponse) => {
     dispatch(addLoader());
     const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
