@@ -53,7 +53,7 @@ const Login = () => {
 
   useEffect(() => {
     request
-      .get("/Authentication")
+      .get("user/Authentication")
       .then(() => {
         navigate("/home");
       })
