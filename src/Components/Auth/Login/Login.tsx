@@ -56,9 +56,10 @@ const Login = () => {
     request
       .get("user/Authentication")
       .then(() => {
-        console.log("success");
         dispatch(removeLoader());
-        navigate("/home");
+        if (localStorage.getItem("user")) {
+          navigate("/home");
+        }
       })
       .catch(() => {
         dispatch(removeLoader());
