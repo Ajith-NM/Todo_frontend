@@ -31,15 +31,13 @@ const Login = () => {
 
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-  const { register, handleSubmit, formState,} = useForm<FormValues>();
+  const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
 
   const submit = (url: string, data: FormValues | Decoded) => {
     request
       .post(url, data)
       .then((res: AxiosResponse) => {
-        console.log("res", res);
-
         dispatch(removeLoader());
         if (res.data.status) {
           localStorage.setItem("user", res.data.user.profilePic);
@@ -54,50 +52,26 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      navigate("/home");
-    }
+    request
+      .get("/Authentication")
+      .then(() => {
+        navigate("/home");
+      })
+      .catch(() => {
+        localStorage.removeItem("user");
+      });
   }, []);
 
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
-    submit("user/postLogin",data)
-    // request
-    //   .post("user/postLogin", data)
-    //   .then((res: AxiosResponse) => {
-    //     reset();
-    //     dispatch(removeLoader());
-    //     localStorage.setItem("user", res.data.user.profilePic);
-    //     navigate("/home");
-    //   })
-    //   .catch((err: AxiosError<Response>) => {
-    //     dispatch(removeLoader());
-    //     const errorRes = err.response?.data.msg;
-    //     setErrMessage(errorRes!);
-    //   });
+    submit("user/postLogin", data);
   };
 
   const onGoogleAuthSubmit = async (data: CredentialResponse) => {
     dispatch(addLoader());
     const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
     if (userData) {
-      submit("user/postLogin/Auth",userData)
-      // await request
-      //   .post("user/postLogin/Auth", userData)
-      //   .then((res: AxiosResponse) => {
-      //     console.log("res", res);
-
-      //     dispatch(removeLoader());
-      //     if (res.data.status) {
-      //       localStorage.setItem("user", res.data.user.profilePic);
-      //       navigate("/home");
-      //     }
-      //   })
-      //   .catch((err: AxiosError<Response>) => {
-      //     dispatch(removeLoader());
-      //     const errorRes = err.response?.data.msg;
-      //     setErrMessage(errorRes!);
-      //   });
+      submit("user/postLogin/Auth", userData);
     }
   };
 

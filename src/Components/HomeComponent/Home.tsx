@@ -18,6 +18,7 @@ type FormValues = {
 type Response = {
   status: boolean;
   response: string;
+  authError?:boolean;
 };
 
 const Home = () => {
@@ -41,11 +42,7 @@ const Home = () => {
       })
       .catch((err: AxiosError<Response>) => {
         const errorRes = err.response?.data.response;
-        setGetMessage(errorRes!);
-        if (errorRes==="failed") {
-          localStorage.removeItem('user')
-          navigate("/")
-        }
+        setGetMessage(errorRes!)
       });
   }, []);
 

@@ -11,6 +11,7 @@ import { addLoader, removeLoader } from "../../redux/Actions/LoadingSlice";
 type Response = {
   status: boolean;
   response: string;
+  authError?: boolean;
 };
 type Task = {
   task_Id: number;
@@ -31,18 +32,18 @@ const UpdateTodo = () => {
   const [status, setStatus] = useState<string>();
 
   useEffect(() => {
-    dispatch(addLoader())
+    dispatch(addLoader());
     request
       .get(`task/getTask/${+params.id!}`)
       .then((data: AxiosResponse) => {
-        dispatch(removeLoader())
+        dispatch(removeLoader());
         if (data.data.status) {
           setTask(data.data.response);
-          setStatus(data.data.response.status)
+          setStatus(data.data.response.status);
         }
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader())
+        dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
@@ -85,7 +86,9 @@ const UpdateTodo = () => {
             className="input"
             onChange={(event) => setStatus(event?.target.value)}
           >
-            <option selected disabled>{task?.status}</option>
+            <option selected disabled>
+              {task?.status}
+            </option>
             <option value="pending">pending</option>
             <option value="completed">completed</option>
           </select>
