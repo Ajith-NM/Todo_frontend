@@ -40,6 +40,25 @@ const SignUp = () => {
   const { register, handleSubmit, formState,reset} = useForm<FormValues>();
   const { errors } = formState;
   const formdata = new FormData();
+  const login= async (url:string,data:Decoded|FormData)=>{
+    request
+    .post(url, data)
+    .then((res: AxiosResponse) => {
+      reset()
+      dispatch(removeLoader());
+      if (res.data.status) {
+        navigate("/verification/Signup");
+      }
+    })
+    .catch((err: AxiosError<Response>) => {
+      reset()
+      dispatch(removeLoader());
+      if (!err.response?.data.status) {
+        const errorRes = err.response?.data.msg;
+        setErrMessage(errorRes!);
+      }
+    });
+  }
 
   const onSubmit = async (data: FormValues) => {
     formdata.append("email", data.email);
@@ -49,24 +68,24 @@ const SignUp = () => {
     if (data.image[0]) {
       dispatch(addLoader());
       formdata.append("image", data.image[0]);
-      await request
-        .post("user/postSignup", formdata)
-        .then((res: AxiosResponse) => {
-          reset()
-          dispatch(removeLoader());
-          if (res.data.status) {
-            navigate("/verification/Signup");
-          }
-        })
-        .catch((err: AxiosError<Response>) => {
-          reset()
-          dispatch(removeLoader());
-          if (!err.response?.data.status) {
-            const errorRes = err.response?.data.msg;
-            setErrMessage(errorRes!);
-          }
-          setErrMessage("something went wrong ");
-        });
+      await login("user/postSignup",formdata)
+      // await request
+      //   .post("user/postSignup", formdata)
+      //   .then((res: AxiosResponse) => {
+      //     reset()
+      //     dispatch(removeLoader());
+      //     if (res.data.status) {
+      //       navigate("/verification/Signup");
+      //     }
+      //   })
+      //   .catch((err: AxiosError<Response>) => {
+      //     reset()
+      //     dispatch(removeLoader());
+      //     if (!err.response?.data.status) {
+      //       const errorRes = err.response?.data.msg;
+      //       setErrMessage(errorRes!);
+      //     }
+      //   });
     } else {
       setErrMessage("Please select an image");
     }
@@ -76,22 +95,22 @@ const SignUp = () => {
     dispatch(addLoader());
     const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
     if (userData) {
-      await request
-        .post("user/postSignup/Auth", userData)
-        .then((res: AxiosResponse) => {
-          dispatch(removeLoader());
-          if (res.data.status) {
-            navigate("/verification/Signup");
-          }
-        })
-        .catch((err: AxiosError<Response>) => {
-          dispatch(removeLoader());
-          if (!err.response?.data.status) {
-            const errorRes = err.response?.data.msg;
-            setErrMessage(errorRes!);
-          }
-          setErrMessage("something went wrong ");
-        });
+      await login("user/postSignup/Auth",userData)
+      //request
+        // .post("user/postSignup/Auth", userData)
+        // .then((res: AxiosResponse) => {
+        //   dispatch(removeLoader());
+        //   if (res.data.status) {
+        //     navigate("/verification/Signup");
+        //   }
+        // })
+        // .catch((err: AxiosError<Response>) => {
+        //   dispatch(removeLoader());
+        //   if (!err.response?.data.status) {
+        //     const errorRes = err.response?.data.msg;
+        //     setErrMessage(errorRes!);
+        //   }
+        // });
     }
   };
 
