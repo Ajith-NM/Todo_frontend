@@ -47,7 +47,7 @@ const Home = () => {
           navigate("/")
         }
       });
-  }, [dispatch,navigate]);
+  }, []);
 
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());

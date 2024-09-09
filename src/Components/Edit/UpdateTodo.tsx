@@ -46,7 +46,7 @@ const UpdateTodo = () => {
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
-  }, [params.id,dispatch]);
+  }, [params.id]);
 
   const changeStatus = () => {
     dispatch(addLoader());

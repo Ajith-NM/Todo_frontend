@@ -31,55 +31,73 @@ const Login = () => {
 
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
-  const { register, handleSubmit, formState, reset } = useForm<FormValues>();
+  const { register, handleSubmit, formState,} = useForm<FormValues>();
   const { errors } = formState;
 
-  useEffect(() => {
-    if ( localStorage.getItem("user")) {
-      navigate("/home");
-    }
-  },[navigate]);
-  
-  const onSubmit = (data: FormValues) => {
-    dispatch(addLoader());
+  const submit = (url: string, data: FormValues | Decoded) => {
     request
-      .post("user/postLogin", data)
+      .post(url, data)
       .then((res: AxiosResponse) => {
-        reset();
+        console.log("res", res);
+
         dispatch(removeLoader());
-        localStorage.setItem("user", res.data.user.profilePic);
-        navigate("/home");
+        if (res.data.status) {
+          localStorage.setItem("user", res.data.user.profilePic);
+          navigate("/home");
+        }
       })
       .catch((err: AxiosError<Response>) => {
-        reset();
         dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
         setErrMessage(errorRes!);
       });
   };
 
-  
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/home");
+    }
+  }, []);
+
+  const onSubmit = (data: FormValues) => {
+    dispatch(addLoader());
+    submit("user/postLogin",data)
+    // request
+    //   .post("user/postLogin", data)
+    //   .then((res: AxiosResponse) => {
+    //     reset();
+    //     dispatch(removeLoader());
+    //     localStorage.setItem("user", res.data.user.profilePic);
+    //     navigate("/home");
+    //   })
+    //   .catch((err: AxiosError<Response>) => {
+    //     dispatch(removeLoader());
+    //     const errorRes = err.response?.data.msg;
+    //     setErrMessage(errorRes!);
+    //   });
+  };
+
   const onGoogleAuthSubmit = async (data: CredentialResponse) => {
     dispatch(addLoader());
     const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
     if (userData) {
-      await request
-        .post("user/postLogin/Auth", userData)
-        .then((res: AxiosResponse) => {
-          console.log("res",res);
-          
-          dispatch(removeLoader());
-          if (res.data.status) {
-            localStorage.setItem("user", res.data.user.profilePic);
-            navigate("/home");
-          }
-        })
-        .catch((err: AxiosError<Response>) => {
-          dispatch(removeLoader());
-            const errorRes = err.response?.data.msg;
-            setErrMessage(errorRes!);
-         
-        });
+      submit("user/postLogin/Auth",userData)
+      // await request
+      //   .post("user/postLogin/Auth", userData)
+      //   .then((res: AxiosResponse) => {
+      //     console.log("res", res);
+
+      //     dispatch(removeLoader());
+      //     if (res.data.status) {
+      //       localStorage.setItem("user", res.data.user.profilePic);
+      //       navigate("/home");
+      //     }
+      //   })
+      //   .catch((err: AxiosError<Response>) => {
+      //     dispatch(removeLoader());
+      //     const errorRes = err.response?.data.msg;
+      //     setErrMessage(errorRes!);
+      //   });
     }
   };
 
