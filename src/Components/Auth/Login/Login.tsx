@@ -52,12 +52,16 @@ const Login = () => {
   };
 
   useEffect(() => {
+    dispatch(addLoader());
     request
       .get("user/Authentication")
       .then(() => {
+        console.log("success");
+        dispatch(removeLoader());
         navigate("/home");
       })
       .catch(() => {
+        dispatch(removeLoader());
         localStorage.removeItem("user");
       });
   }, []);
