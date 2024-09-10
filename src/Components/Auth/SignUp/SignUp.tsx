@@ -69,23 +69,7 @@ const SignUp = () => {
       dispatch(addLoader());
       formdata.append("image", data.image[0]);
       await login("user/postSignup",formdata)
-      // await request
-      //   .post("user/postSignup", formdata)
-      //   .then((res: AxiosResponse) => {
-      //     reset()
-      //     dispatch(removeLoader());
-      //     if (res.data.status) {
-      //       navigate("/verification/Signup");
-      //     }
-      //   })
-      //   .catch((err: AxiosError<Response>) => {
-      //     reset()
-      //     dispatch(removeLoader());
-      //     if (!err.response?.data.status) {
-      //       const errorRes = err.response?.data.msg;
-      //       setErrMessage(errorRes!);
-      //     }
-      //   });
+     
     } else {
       setErrMessage("Please select an image");
     }
@@ -96,21 +80,6 @@ const SignUp = () => {
     const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
     if (userData) {
       await login("user/postSignup/Auth",userData)
-      //request
-        // .post("user/postSignup/Auth", userData)
-        // .then((res: AxiosResponse) => {
-        //   dispatch(removeLoader());
-        //   if (res.data.status) {
-        //     navigate("/verification/Signup");
-        //   }
-        // })
-        // .catch((err: AxiosError<Response>) => {
-        //   dispatch(removeLoader());
-        //   if (!err.response?.data.status) {
-        //     const errorRes = err.response?.data.msg;
-        //     setErrMessage(errorRes!);
-        //   }
-        // });
     }
   };
 
