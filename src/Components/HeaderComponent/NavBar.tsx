@@ -27,7 +27,7 @@ const NavBar = () => {
           </button>
 
           <div className="UserProfile">
-            <img src={profile} alt=" profile image" />
+            <img src={profile} alt="profile image" />
           </div>
         </div>
       </nav>

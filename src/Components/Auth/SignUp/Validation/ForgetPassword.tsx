@@ -47,7 +47,7 @@ const ForgetPassword = () => {
 
   return (
     <>
-      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)}>
+      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)} data-testid="form">
         {loader && <Loader />}
         <div className="inputTag">
           <p>Please enter your email. </p>

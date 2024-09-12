@@ -53,7 +53,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)}>
+      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)} data-testid="form">
         {loader && <Loader />}
         <div className="inputTag">
           <p>Add a strong password. </p>

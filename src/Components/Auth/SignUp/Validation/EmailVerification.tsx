@@ -34,7 +34,7 @@ const EmailVerification = () => {
     dispatch(addLoader());
     request
       .post("user/emailVerification", data)
-      .then((data: AxiosResponse) => {
+      .then((data: AxiosResponse) => { 
         dispatch(removeLoader());
         if (data.data.status) {
           if (preComp === "Signup") {
@@ -52,10 +52,10 @@ const EmailVerification = () => {
   };
   return (
     <>
-      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)}>
-        {loader && <Loader />}
+      <form className="loginform validation" onSubmit={handleSubmit(onSubmit)} data-testid="form">
+        {loader && <Loader/>}
         <div className="inputTag">
-          <p>Please enter the OTP that send to your email. </p>
+          <p data-testid="p">Please enter the OTP that send to your email. </p>
           <input
             type="text"
             className="inputfield"
@@ -71,12 +71,12 @@ const EmailVerification = () => {
               },
             })}
           />
-          <span>{errors.otp?.message}</span>
+          <span data-testid="msg">{errors.otp?.message}</span>
         </div>
         <div className="buttons">
-          <button className="submitButton">Verify</button>
+          <button className="submitButton" data-testid="submit">Verify</button>
         </div>
-        <p style={{ color: "brown" }}>{errMessage}</p>
+        <p style={{ color: "brown" }} data-testid="errMsg">{errMessage}</p>
       </form>
     </>
   );
