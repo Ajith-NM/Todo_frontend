@@ -1,15 +1,15 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { request } from "../../../AxiosConfig";
 import "./Validation.css";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
-import {
-  addLoader,
-  removeLoader,
-} from "../../../../redux/Actions/LoadingSlice";
+// import {
+//   addLoader,
+//   removeLoader,
+// } from "../../../../redux/Actions/LoadingSlice";
 import Loader from "../../../Loader";
 
 type FormValues = {
@@ -21,25 +21,24 @@ type Response = {
 };
 
 const ForgetPassword = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+ // const navigate = useNavigate();
+  //const dispatch = useDispatch();
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
-    dispatch(addLoader());
+    //dispatch(addLoader());
     request
       .post("user/forgetPassword", data)
       .then((data: AxiosResponse) => {
-        dispatch(removeLoader());
-        if (data.data.status) {
-          navigate("/verification/Forget");
-        }
+        setErrMessage(data.data.msg);
+        //dispatch(removeLoader());
+        // //
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader());
+       // dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
         setErrMessage(errorRes!);
       });
@@ -69,9 +68,9 @@ const ForgetPassword = () => {
         </div>
         <p style={{ color: "brown" }}>{errors.email?.message}</p>
         <div className="buttons">
-          <button className="submitButton">Next</button>
+          <button className="submitButton" data-testid="submit">Next</button>
         </div>
-        <p style={{ color: "brown" }}>{errMessage}</p>
+        <p style={{ color: "brown" }} data-testid="errMsg">{errMessage}</p>
       </form>
     </>
   );

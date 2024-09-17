@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "../../../../redux/store";
 
 describe("EmailVerification", () => {
-  it("Form-Elements", () => {
+  it("Form-Elements",async () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
@@ -24,8 +24,9 @@ describe("EmailVerification", () => {
   });
 
   it("submit Form Api call", async () => {
-   // const portalLoading = document.getElementById("loadingPortal")!;
+    const portalLoading = document.getElementById("loadingPortal")!;
     userEvent.setup();
+    if (portalLoading) {
     render(
       <Provider store={store}>
         <BrowserRouter>
@@ -33,16 +34,15 @@ describe("EmailVerification", () => {
         </BrowserRouter>
       </Provider>
     )
+  }
     const submitButton = screen.getByTestId("submit")
-    const input = screen.getByRole("textbox");
-    const errMsg= screen.getByTestId("errMsg")
-   expect(errMsg).toBeInTheDocument()
+    const input = screen.getByRole("textbox"); 
+   expect(screen.getByTestId("errMsg")).toBeInTheDocument()
     expect(submitButton).toBeInTheDocument()
     await userEvent.type(input, "12345678");
     expect(input).toHaveValue("12345678");
     await userEvent.click(submitButton);
-    
-    expect(errMsg).toHaveTextContent("")
+    expect( screen.getByTestId("errMsg")).toHaveTextContent("please enter correct otp")
    
 
   });

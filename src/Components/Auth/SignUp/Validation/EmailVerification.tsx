@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../../AxiosConfig";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import {
   addLoader,
@@ -32,23 +32,25 @@ const EmailVerification = () => {
   const { errors } = formState;
   const onSubmit = (data: FormValues) => {
     dispatch(addLoader());
-    request
-      .post("user/emailVerification", data)
-      .then((data: AxiosResponse) => { 
-        dispatch(removeLoader());
+   request
+     .post("user/emailVerification", data)
+     .then((data: AxiosResponse) => {
+       const errorRes = data.data.msg;
+       setErrMessage(errorRes!);
+       dispatch(removeLoader());
         if (data.data.status) {
           if (preComp === "Signup") {
             navigate("/");
-          } else {
-            navigate("/resetPassword");
-          }
+           } else {
+             navigate("/resetPassword");
+           }
         }
-      })
-      .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader());
+     })
+     .catch((err: AxiosError<Response>) => {
+       dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
-        setErrMessage(errorRes!);
-      });
+       setErrMessage(errorRes!);
+     });
   };
   return (
     <>
