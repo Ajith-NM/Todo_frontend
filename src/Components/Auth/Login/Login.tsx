@@ -5,7 +5,7 @@ import { request } from "../../AxiosConfig";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../../Loader";
-import { addLoader, removeLoader } from "../../../redux/Actions/LoadingSlice";
+//import { addLoader, removeLoader } from "../../../redux/Actions/LoadingSlice";
 import { RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
@@ -38,42 +38,42 @@ const Login = () => {
     request
       .post(url, data)
       .then((res: AxiosResponse) => {
-        dispatch(removeLoader());
+       // dispatch(removeLoader());
         if (res.data.status) {
           localStorage.setItem("user", res.data.user.profilePic);
           navigate("/home");
         }
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader());
+      //  dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
         setErrMessage(errorRes!);
       });
   };
 
   useEffect(() => {
-    dispatch(addLoader());
+    //dispatch(addLoader());
     request
       .get("user/Authentication")
       .then(() => {
-        dispatch(removeLoader());
+      //  dispatch(removeLoader());
         if (localStorage.getItem("user")) {
           navigate("/home");
         }
       })
       .catch(() => {
-        dispatch(removeLoader());
+       // dispatch(removeLoader());
         localStorage.removeItem("user");
       });
   }, []);
 
   const onSubmit = (data: FormValues) => {
-    dispatch(addLoader());
+   // dispatch(addLoader());
     submit("user/postLogin", data);
   };
 
   const onGoogleAuthSubmit = async (data: CredentialResponse) => {
-    dispatch(addLoader());
+  //  dispatch(addLoader());
     const userData: Decoded = jwtDecode<Decoded>(data?.credential ?? "");
     if (userData) {
       submit("user/postLogin/Auth", userData);
@@ -148,7 +148,7 @@ const Login = () => {
         <button>Submit</button>
       </div>
       <p>
-        Don't have an account? <NavLink to={"/signup"}>Signup</NavLink>{" "}
+        Don't have an account? <NavLink to={"/signup"}>Signup</NavLink>
       </p>
       <p style={{ color: "brown" }}>{errMessage}</p>
     </form>

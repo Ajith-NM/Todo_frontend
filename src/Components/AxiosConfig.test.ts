@@ -3,6 +3,6 @@ import { request } from "./AxiosConfig"
 
 describe("AxiosConfig.ts",()=>{
 it("baseUrl",()=>{
-expect(request.defaults.baseURL).toBe("http://localhost:4000/")
+expect(request.defaults.baseURL).toBe("https://todo-backend-k3fp.onrender.com/")
 })
 })

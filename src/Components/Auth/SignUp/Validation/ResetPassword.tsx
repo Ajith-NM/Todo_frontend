@@ -6,10 +6,10 @@ import { AxiosError, AxiosResponse } from "axios";
 import { request } from "../../../AxiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
-import {
-  addLoader,
-  removeLoader,
-} from "../../../../redux/Actions/LoadingSlice";
+// import {
+//   addLoader,
+//   removeLoader,
+// } from "../../../../redux/Actions/LoadingSlice";
 import Loader from "../../../Loader";
 
 type FormValues = {
@@ -30,11 +30,11 @@ const ResetPassword = () => {
 
   const onSubmit = (data: FormValues) => {
     if (data.password[0] === data.password[1]) {
-      dispatch(addLoader());
+     // dispatch(addLoader());
       request
         .put("user/resetPassword", { password: data.password[0] })
         .then((data: AxiosResponse) => {
-          dispatch(removeLoader());
+         // dispatch(removeLoader());
           if (data.data.status) {
             navigate("/");
           } else {
@@ -42,7 +42,7 @@ const ResetPassword = () => {
           }
         })
         .catch((err: AxiosError<Response>) => {
-          dispatch(removeLoader());
+          //dispatch(removeLoader());
           const errorRes = err.response?.data.msg;
           setErrMessage(errorRes!);
         });
@@ -97,7 +97,7 @@ const ResetPassword = () => {
         <div className="buttons">
           <button className="submitButton">Submit</button>
         </div>
-        <p style={{ color: "brown", fontSize: "18px" }}>{errMessage}</p>
+        <p style={{ color: "brown", fontSize: "18px" }} data-testid="errorMsg">{errMessage}</p>
       </form>
     </>
   );

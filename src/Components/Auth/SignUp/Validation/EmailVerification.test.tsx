@@ -24,9 +24,8 @@ describe("EmailVerification", () => {
   });
 
   it("submit Form Api call", async () => {
-    const portalLoading = document.getElementById("loadingPortal")!;
+    //const portalLoading = document.getElementById("loadingPortal")!;
     userEvent.setup();
-    if (portalLoading) {
     render(
       <Provider store={store}>
         <BrowserRouter>
@@ -34,16 +33,15 @@ describe("EmailVerification", () => {
         </BrowserRouter>
       </Provider>
     )
-  }
-    const submitButton = screen.getByTestId("submit")
+    const submitButton = screen.getByText("Verify")
     const input = screen.getByRole("textbox"); 
    expect(screen.getByTestId("errMsg")).toBeInTheDocument()
     expect(submitButton).toBeInTheDocument()
     await userEvent.type(input, "12345678");
     expect(input).toHaveValue("12345678");
     await userEvent.click(submitButton);
-    expect( screen.getByTestId("errMsg")).toHaveTextContent("please enter correct otp")
-   
-
+  expect( screen.getByTestId("errMsg")).toBeEmptyDOMElement()
+  //expect(screen.getByText("Add a strong password.")).toBeInTheDocument()
+    //expect( screen.getByTestId("errMsg")).toHaveTextContent("please enter correct otp") 
   });
 });

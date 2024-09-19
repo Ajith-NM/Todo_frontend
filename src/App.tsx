@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <PageNavigation />
+        <PageNavigation/>
       </BrowserRouter>
     </>
   );

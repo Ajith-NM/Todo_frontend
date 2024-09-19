@@ -4,7 +4,6 @@ import ForgetPassword from "./ForgetPassword"
 import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
 import { store } from "../../../../redux/store"
-//import axios from "axios"
 import userEvent from "@testing-library/user-event"
 
 describe("ForgetPassword",()=>{
@@ -20,24 +19,24 @@ it("Form elements",()=>{
 
 })
 it("api call testing",async()=>{
+   // const portalLoading = document.getElementById("loadingPortal")!;
     userEvent.setup();
-    // vi.spyOn(axios,"post").mockImplementation(()=>{
-    //     return Promise.resolve({
-    //         status:true,
-    //         msg:"verify your email by entering the otp",
-    //     })
-    // })
     render(
         <Provider store={store}>
         <BrowserRouter><ForgetPassword/></BrowserRouter>  
         </Provider>
     )
-   // const submitButton = screen.getByTestId("submit")
+    const submitButton = screen.getByTestId("submit")
+    const error = screen.getByTestId("error")
+    //expect(screen.getByTestId("loader")).toBeNull()
+    await userEvent.click(submitButton);
+    expect(error).toHaveTextContent("please enter email");
+
     const input = screen.getByRole("textbox");
     await userEvent.type(input, "example@gmail.com");
     expect(input).toHaveValue("example@gmail.com");
-    //await userEvent.click(submitButton);
-   // expect(await screen.findByTestId("errMsg")).toHaveTextContent("verify your email by entering the otp")
+    await userEvent.click(submitButton);
+    expect(await screen.findByTestId("errMsg")).toHaveTextContent( "something went wrong")
 })
 
 })

@@ -8,6 +8,6 @@ describe("Page-not-found",()=>{
     render(<PageNotFound/>)
     it("pagenotfound",()=>{
      
-     expect(screen.findByText("PageNotFound"))
+     expect(screen.getByText("PageNotFound")).toBeInTheDocument()
     })
     })

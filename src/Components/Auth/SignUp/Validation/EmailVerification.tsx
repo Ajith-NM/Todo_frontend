@@ -5,13 +5,14 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../../AxiosConfig";
 import { useState } from "react";
-import {  useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
-import {
-  addLoader,
-  removeLoader,
-} from "../../../../redux/Actions/LoadingSlice";
 import Loader from "../../../Loader";
+// import {
+//   addLoader,
+//   removeLoader,
+// } from "../../../../redux/Actions/LoadingSlice";
+// import Loader from "../../../Loader";
 
 type FormValues = {
   otp: string;
@@ -25,21 +26,19 @@ const EmailVerification = () => {
   const { preComp } = useParams();
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+ // const dispatch = useDispatch();
   const loader = useSelector((state: RootState) => state.loader.loader);
 
   const { register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const onSubmit = (data: FormValues) => {
-    dispatch(addLoader());
+   // dispatch(addLoader());
    request
      .post("user/emailVerification", data)
      .then((data: AxiosResponse) => {
-       const errorRes = data.data.msg;
-       setErrMessage(errorRes!);
-       dispatch(removeLoader());
+     //  dispatch(removeLoader());
         if (data.data.status) {
-          if (preComp === "Signup") {
+           if (preComp === "Signup") {
             navigate("/");
            } else {
              navigate("/resetPassword");
@@ -47,7 +46,7 @@ const EmailVerification = () => {
         }
      })
      .catch((err: AxiosError<Response>) => {
-       dispatch(removeLoader());
+     //  dispatch(removeLoader());
         const errorRes = err.response?.data.msg;
        setErrMessage(errorRes!);
      });

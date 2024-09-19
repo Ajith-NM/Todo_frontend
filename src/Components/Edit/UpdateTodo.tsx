@@ -32,35 +32,35 @@ const UpdateTodo = () => {
   const [status, setStatus] = useState<string>();
 
   useEffect(() => {
-    dispatch(addLoader());
+    // dispatch(addLoader());
     request
       .get(`task/getTask/${+params.id!}`)
       .then((data: AxiosResponse) => {
-        dispatch(removeLoader());
+        // dispatch(removeLoader());
         if (data.data.status) {
           setTask(data.data.response);
           setStatus(data.data.response.status);
         }
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader());
+        // dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
   }, [params.id]);
 
   const changeStatus = () => {
-    dispatch(addLoader());
+    //dispatch(addLoader());
     request
       .put(`task/statusUpdate/?id=${params.id}`, { status: status })
       .then((res: AxiosResponse) => {
-        dispatch(removeLoader());
+        //dispatch(removeLoader());
         if (res.data.status) {
           navigate("/home");
         }
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader());
+       // dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
@@ -80,17 +80,22 @@ const UpdateTodo = () => {
           <i className="bx bx-left-arrow-alt"></i>
         </div>
         <h1 className="title">{task?.title}</h1>
-        <p>{task?.description}</p>
+        <p data-testid="description">{task?.description}</p>
         <div className="UpdateInputs">
           <select
             className="input"
             onChange={(event) => setStatus(event?.target.value)}
+            data-testid="select"
           >
             <option selected disabled>
               {task?.status}
             </option>
-            <option value="pending">pending</option>
-            <option value="completed">completed</option>
+            <option value="pending" data-testid="options">
+              pending
+            </option>
+            <option value="completed" data-testid="options">
+              completed
+            </option>
           </select>
           <button onClick={() => changeStatus()}>Save</button>
         </div>

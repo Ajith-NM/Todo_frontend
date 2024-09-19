@@ -1,10 +1,10 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { request } from "../../../AxiosConfig";
 import "./Validation.css";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import {  useSelector, } from "react-redux";
 import { RootState } from "../../../../redux/store";
 // import {
 //   addLoader,
@@ -21,7 +21,7 @@ type Response = {
 };
 
 const ForgetPassword = () => {
- // const navigate = useNavigate();
+  const navigate = useNavigate();
   //const dispatch = useDispatch();
   const loader = useSelector((state: RootState) => state.loader.loader);
   const [errMessage, setErrMessage] = useState("");
@@ -29,13 +29,12 @@ const ForgetPassword = () => {
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
-    //dispatch(addLoader());
+   // dispatch(addLoader());
     request
       .post("user/forgetPassword", data)
-      .then((data: AxiosResponse) => {
-        setErrMessage(data.data.msg);
-        //dispatch(removeLoader());
-        // //
+      .then(() => {
+      //  dispatch(removeLoader());
+        navigate("/verification/:forget")
       })
       .catch((err: AxiosError<Response>) => {
        // dispatch(removeLoader());
@@ -47,7 +46,7 @@ const ForgetPassword = () => {
   return (
     <>
       <form className="loginform validation" onSubmit={handleSubmit(onSubmit)} data-testid="form">
-        {loader && <Loader />}
+        {loader && <Loader  data-testid="loader"/>}
         <div className="inputTag">
           <p>Please enter your email. </p>
           <input
@@ -66,7 +65,7 @@ const ForgetPassword = () => {
             })}
           />
         </div>
-        <p style={{ color: "brown" }}>{errors.email?.message}</p>
+        <p style={{ color: "brown" }} data-testid="error">{errors.email?.message}</p>
         <div className="buttons">
           <button className="submitButton" data-testid="submit">Next</button>
         </div>
