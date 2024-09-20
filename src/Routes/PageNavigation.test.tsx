@@ -8,7 +8,7 @@ import PageNavigation from "./PageNavigation";
 
 const App = ({ goTo }: { goTo: string }) => {
   return (
-    <GoogleOAuthProvider clientId="185183929222-jos17curep6q4eo2lsg8hjqt0gjcq5ja.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_clientId}>
       <Provider store={store}>
         <MemoryRouter initialEntries={[goTo]}>
           <PageNavigation />
@@ -24,7 +24,7 @@ describe("Page-Navigation-test", () => {
   //login
   it("Render Login page", () => {
     render(
-      <GoogleOAuthProvider clientId="185183929222-jos17curep6q4eo2lsg8hjqt0gjcq5ja.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_clientId}>
         <Provider store={store}>
           <BrowserRouter>
             <PageNavigation />

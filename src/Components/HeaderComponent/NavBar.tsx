@@ -22,7 +22,7 @@ const NavBar = () => {
               localStorage.removeItem("user");
               navigate("/");
             }}
-          >
+          data-testid="logout">
             LogOut
           </button>
 
