@@ -47,18 +47,18 @@ const Home = () => {
   }, []);
 
   const onSubmit = (data: FormValues) => {
-    dispatch(addLoader());
+   // dispatch(addLoader());
     request
       .post("task/create", data)
       .then((data: AxiosResponse) => {
-        dispatch(removeLoader());
+       // dispatch(removeLoader());
         if (data.data.status) {
           dispatch(addTask(data.data.response));
           setGetMessage("");
         }
       })
       .catch((err: AxiosError<Response>) => {
-        dispatch(removeLoader());
+       // dispatch(removeLoader());
         const errorRes = err.response?.data.response;
         alert(errorRes);
       });
@@ -98,7 +98,7 @@ const Home = () => {
                 message: "please enter title",
               },
             })}
-          />
+          data-testid="title"/>
           <p style={{ color: "brown",marginLeft:"10%" ,marginBottom:"10px"}}>{errors.title?.message}</p>
           <input
             type="text"
@@ -109,14 +109,14 @@ const Home = () => {
                 message: "please enter a short Discription",
               },
             })}
-          />
+            data-testid="description"/>
           <p style={{ color: "brown" }}>{errors.description?.message}</p>
           <button>Add Task</button>
         </form>
         <div className="cards">
           {getTask.map((task, i) => {
             return (
-              <div className="task" key={i}>
+              <div className="task" key={i} data-testid="todo">
                 <h3 onClick={() => console.log("go to task1")}>{task.title}</h3>
                 <div className="buttons">
                   <p>

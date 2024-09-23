@@ -1,5 +1,16 @@
 import { http, HttpResponse } from "msw";
 
+
+let taskId=1
+const Tasks=[ {
+  task_Id: 1,
+  title: "Test Title",
+  description: "Test description",
+  status: "pending",
+  user_Id: 1,
+  createdAt: "11-12-2024",
+  updatedAt: "12-12-2024",
+},]
 export const handlers = [
 
   //email verification
@@ -87,5 +98,39 @@ export const handlers = [
      
     }
   ),
+  // Get All Task
+  http.get(
+    "https://todo-backend-k3fp.onrender.com/task/home",
+    async () => {
+      console.log("Get All Task");
+     return HttpResponse.json(
+        { status: true, response: Tasks},
+        { status: 200 }
+      );
+    }
+  ),
+  //Create new task
+  http.post(
+    "https://todo-backend-k3fp.onrender.com/task/create",
+    async ({ request }) => {
+      const newdata = await request.json();
+      console.log("new Task=",newdata);
+      const Task= {
+        task_Id: taskId+1,
+        title: `Test Title ${taskId+1}`,
+        description: `Test description ${taskId+1}`,
+        status: "pending",
+        user_Id: 1,
+        createdAt: "11-12-2024",
+        updatedAt: "12-12-2024",
+      }
+     taskId=taskId+1
+      return HttpResponse.json(
+        { status: true, response:Task},
+        { status: 200 }
+      );
+    }
+  ),
+  
 
 ];
