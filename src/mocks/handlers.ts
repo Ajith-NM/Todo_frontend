@@ -19,11 +19,6 @@ export const handlers = [
     async ({ request }) => {
       const newdata = await request.json();
       console.log(newdata, "OTP");
-
-      // return HttpResponse.json(
-      //   { status: false, msg: "please enter correct otp" },
-      //   { status: 400 }
-      // );
       return HttpResponse.json(
         { status: true, msg: "email verified successfully" },
         { status: 200 }
